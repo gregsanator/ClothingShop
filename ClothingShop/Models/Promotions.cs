@@ -10,14 +10,10 @@ namespace ClothingShop.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-
-
-        [ForeignKey("ClothingItem")]
-        public Guid ClothingItemId { get; set; }
-        public ClothingItems ClothingItem { get; set; }
-
-
         public double DiscountPercantage { get; set; }
-        public string DiscountName { get; set; }
+        public string Name { get; set; }
+        public DateTime StartDate { get; set; }
+        public DateTime EndDate { get; set; }
+        public ICollection<ClothingItemsPromotions> ClothingItemsPromotions { get; set; }
     }
 }

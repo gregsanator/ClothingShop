@@ -6,12 +6,8 @@ using System.Web;
 
 namespace ClothingShop.Models
 {
-    public class ClubCards
+    public class ClubCards // 1 - to - 1 relationship between user and clubcards
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
-
-
         [ForeignKey("User")]
         public Guid UserId { get; set; }
         public Users User { get; set; }
@@ -24,7 +20,7 @@ namespace ClothingShop.Models
 
         public DateTime DateCreated { get; set; }
         public double Points { get; set; }
-        public double? DiscountPercantage { get; set; }
+        public double DiscountPercantage { get; set; }
         public bool Enabled { get; set; }
 
     }

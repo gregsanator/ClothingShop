@@ -13,13 +13,14 @@ namespace ClothingShop.Models
 
 
         [ForeignKey("Subcategory")]
-        public Guid CategoryId { get; set; }
+        public Guid SubcategoryId { get; set; }
         public Subcategories Subcategory { get; set; }
 
 
         public string Name { get; set; }
-        public bool Availability { get; set; }
         public int Gender { get; set; }
         public string BrandName { get; set; }
+        public string Description { get; set; }
+        public double Price { get; set; }
     }
 }

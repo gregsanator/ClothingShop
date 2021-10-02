@@ -6,9 +6,8 @@ using System.Web;
 
 namespace ClothingShop.Models
 {
-    public class SizeTypes
+    public class ClothingItemsPromotions
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
 
@@ -17,7 +16,8 @@ namespace ClothingShop.Models
         public ClothingItems ClothingItem { get; set; }
 
 
-        public int Size { get; set; }
-        public string SizeDescription { get; set; }
+        [ForeignKey("Promotion")]
+        public Guid PromotionId { get; set; }
+        public Promotions Promotion { get; set; }
     }
 }
