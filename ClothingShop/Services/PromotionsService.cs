@@ -9,7 +9,7 @@ namespace ClothingShop.Services
 {
     public class PromotionsService
     {
-        public List<PromotionsListItem> List()
+        public List<PromotionsListItem> List() // returns a list of all promotions
         {
             using (var context = new ClothingShopDbContext())
             {
@@ -25,11 +25,11 @@ namespace ClothingShop.Services
             }
         }
 
-        public PromotionsForm Details(Guid id)
+        public PromotionsForm Details(Guid id) // returns da details of the promotion and all clothesitems that are included in the promotion
         {
             using (var context = new ClothingShopDbContext())
             {
-                PromotionsForm details = context.Promotions.Select(a => new PromotionsForm
+                PromotionsForm details = context.Promotions.Where(a => a.Id == id).Select(a => new PromotionsForm
                 {
                     Name = a.Name,
                     DiscoundPercantage = a.DiscountPercantage,
@@ -40,7 +40,7 @@ namespace ClothingShop.Services
                 return details;
             }
         }
-        public bool Save(PromotionsSave model)
+        public bool Save(PromotionsSave model) // make a new promotion
         {
             using (var context = new ClothingShopDbContext())
             {
@@ -68,7 +68,7 @@ namespace ClothingShop.Services
             }
         }
 
-        public List<ClothingItemPromotion> ItemsInPromotion(Guid id)
+        public List<ClothingItemPromotion> ItemsInPromotion(Guid id) // returns all the items and informations which items are in the promotion
         {
             using (var context = new ClothingShopDbContext())
             {

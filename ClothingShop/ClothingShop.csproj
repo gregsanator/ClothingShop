@@ -101,6 +101,7 @@
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\ClothingItemsController.cs" />
     <Compile Include="Controllers\SubcategoriesController.cs" />
+    <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="DTO\Administrators.cs" />
     <Compile Include="DTO\Carts.cs" />
     <Compile Include="DTO\Categories.cs" />
@@ -166,6 +167,7 @@
     <Folder Include="Views\Categories\" />
     <Folder Include="Views\ClothingItems\" />
     <Folder Include="Views\Subcategories\" />
+    <Folder Include="Views\Users\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202110011214485_InitialMigration.resx">
