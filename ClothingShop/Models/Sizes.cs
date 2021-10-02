@@ -11,5 +11,6 @@ namespace ClothingShop.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         public string Size { get; set; }
+        public int SizeType { get; set; }
     }
 }

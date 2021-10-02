@@ -9,7 +9,7 @@ namespace ClothingShop.Services
 {
     public class CartsService
     {
-        public List<CartsListItem> ListItems(Guid id) // list all the items that are inside the cart for a given user 
+        public List<CartsListItem> List(Guid id) // list all the items that are inside the cart for a given user 
         {
             using(var context = new ClothingShopDbContext())
             {

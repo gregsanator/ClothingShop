@@ -35,13 +35,8 @@ namespace ClothingShop.DTO
             public string BrandName { get; set; }
             public string Description { get; set; }
             public double Price { get; set; }
-        }
+            public int SizeType { get; set; }
 
-        public class ClothingItemSizes
-        {
-            public Guid SizeId { get; set; }
-            public string Size { get; set; }
-            public bool Enabled { get; set; }
         }
     }
 }

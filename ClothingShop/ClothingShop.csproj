@@ -87,17 +87,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AdministratorsController.cs" />
+    <Compile Include="Controllers\CartsController.cs" />
+    <Compile Include="Controllers\CategoriesController.cs" />
+    <Compile Include="Controllers\ClothingItemsController.cs" />
+    <Compile Include="Controllers\SubcategoriesController.cs" />
     <Compile Include="DTO\Administrators.cs" />
     <Compile Include="DTO\Carts.cs" />
     <Compile Include="DTO\Categories.cs" />
     <Compile Include="DTO\ClothingItems.cs" />
     <Compile Include="DTO\ClothingItemsSizes.cs" />
     <Compile Include="DTO\Promotions.cs" />
+    <Compile Include="DTO\Sizes.cs" />
     <Compile Include="DTO\Subcategories.cs" />
     <Compile Include="DTO\Users.cs" />
     <Compile Include="Global.asax.cs">
@@ -131,11 +141,16 @@
     <Compile Include="Services\ClothingItemsService.cs" />
     <Compile Include="Services\ClothingItemsSizesService.cs" />
     <Compile Include="Services\PromotionsService.cs" />
+    <Compile Include="Services\SizesService.cs" />
     <Compile Include="Services\SubcategoriesService.cs" />
     <Compile Include="Services\UsersService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\web.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -145,7 +160,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\" />
+    <Folder Include="Data\" />
+    <Folder Include="Views\Administrators\" />
+    <Folder Include="Views\Carts\" />
+    <Folder Include="Views\Categories\" />
+    <Folder Include="Views\ClothingItems\" />
+    <Folder Include="Views\Subcategories\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202110011214485_InitialMigration.resx">

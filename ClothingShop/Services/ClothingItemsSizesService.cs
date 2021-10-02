@@ -9,6 +9,7 @@ namespace ClothingShop.Services
 {
     public class ClothingItemsSizesService
     {
+        //This service is for administrators to add and modify the stock of products
         public List<ClothingItemsSizesListItem> List(string brandName) //list the availabillity of a certain product with a certain size
         {
             using (var context = new ClothingShopDbContext())

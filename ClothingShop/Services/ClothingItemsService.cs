@@ -12,7 +12,7 @@ namespace ClothingShop.Services
         public List<ClothingItemsListItem> List(Guid? subcategoryId)
         //if subcategoryId != null than list all avalable products with this categoryId else list all avalable products
         {
-            using (var context = new ClothingShopDbContext())
+            using (var context = new ClothingShopDbContext()) 
             {
                 IQueryable<ClothingItems> item = context.ClothingItems;
                 if (subcategoryId != null)
@@ -30,7 +30,7 @@ namespace ClothingShop.Services
             }
         }
 
-        public ClothingItemsForm Details(Guid itemId)
+        public ClothingItemsForm Details(Guid itemId) // details 
         {
             using (var context = new ClothingShopDbContext())
             {
@@ -60,7 +60,8 @@ namespace ClothingShop.Services
                     Description = model.Description,
                     Gender = model.Gender,
                     SubcategoryId = model.SubcategoryId,
-                    Price = model.Price
+                    Price = model.Price,
+                    SizeType = model.SizeType
                 };
 
                 if (item.Id != Guid.Empty)
@@ -77,26 +78,6 @@ namespace ClothingShop.Services
                 context.SaveChanges();
 
                 return true;
-            }
-        }
-
-        public List<ClothingItemSizes> Sizes(Guid id)
-        // Load all sizes but enable the field only in the sizes that are avalable (that are saved in ClothingItemsSizes table)
-        {
-            using (var context = new ClothingShopDbContext())
-            {
-                List<ClothingItemSizes> sizes = (from s in context.Sizes
-                                                 join cis in context.ClothingItemsSizes.Where(a => a.ClothingItemId == id)
-                                                 on s.Id equals cis.SizeId into joinedscis
-                                                 from scis in joinedscis.DefaultIfEmpty()
-                                                 select new ClothingItemSizes
-                                                 {
-                                                     SizeId = s.Id,
-                                                     Size = s.Size,
-                                                     Enabled = scis.Quantity != 0
-
-                                                 }).ToList();
-                return sizes;
             }
         }
     }

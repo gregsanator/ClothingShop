@@ -22,5 +22,7 @@ namespace ClothingShop.Models
         public string BrandName { get; set; }
         public string Description { get; set; }
         public double Price { get; set; }
+        public int SizeType { get; set; }
+
     }
 }
