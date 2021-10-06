@@ -12,7 +12,7 @@ namespace ClothingShop.Controllers
     {
         [Route("api/clothingshop/clothingItems/list/{id}")]
         [HttpGet]
-        public IHttpActionResult List(Guid? id)
+        public IHttpActionResult List(Guid id)
         {
             ClothingItemsService service = new ClothingItemsService();
             List<ClothingItemsListItem> list = service.List(id);

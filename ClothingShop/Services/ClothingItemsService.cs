@@ -9,23 +9,74 @@ namespace ClothingShop.Services
 {
     public class ClothingItemsService
     {
-        public List<ClothingItemsListItem> List(Guid? subcategoryId)
-        //if subcategoryId != null than list all avalable products with this categoryId else list all avalable products
+        public List<ClothingItemsListItem> List(Guid id) // filter and show all the products 
         {
             using (var context = new ClothingShopDbContext())
             {
-                IQueryable<ClothingItems> item = context.ClothingItems;
-                if (subcategoryId != null)
-                    item = item.Where(a => a.SubcategoryId == subcategoryId);
-
-                List<ClothingItemsListItem> list = item.Select(a => new ClothingItemsListItem
+                List<ClothingItemsListItem> list = context.ClothingItemsSizes.Select(a => new ClothingItemsListItem // list of all items
                 {
-                    Id = a.Id,
-                    Name = a.Name,
-                    Availability = context.ClothingItemsSizes.Any(b => b.ClothingItemId == a.Id && b.Quantity > 0),
-                    Price = a.Price
+                    Id = a.ClothingItem.Id,
+                    Name = a.ClothingItem.Name,
+                    Price = a.ClothingItem.Price,
+                    Availability = a.Quantity > 0,
+                    BrandId = a.ClothingItem.BrandId,
+                    SizeId = a.SizeId,
+                    SubcategoryId = a.ClothingItem.SubcategoryId
                 }).ToList();
 
+                if (context.UserSubcategoriesFilter.Where(a => a.UserId == id).Any()) // if user selected a subcategory
+                {
+                    list = (from l in list // join the list from all clothesItems with a subcategory with user requested subcategory
+                            join sub in context.UserSubcategoriesFilter.Where(a => a.UserId == id)
+                            on l.SubcategoryId equals sub.SubcategoryId
+                            select new ClothingItemsListItem
+                            {
+                                Id = l.Id,
+                                Name = l.Name,
+                                Price = l.Price,
+                                Availability = l.Price > 0,
+                                BrandId = l.BrandId,
+                                SizeId = l.SizeId,
+                                SubcategoryId = l.SubcategoryId
+                            }).ToList();
+                    list.Select(a => a.Id).Distinct();
+                }
+
+                if (context.UserSizesFilter.Where(a => a.UserId == id).Any()) // if selected size
+                {
+                    list = (from l in list // join list with(filter/unfiltered) items and get new list
+                            join us in context.UserSizesFilter.Where(a => a.UserId == id)
+                            on l.SizeId equals us.SizeId
+                            select new ClothingItemsListItem
+                            {
+                                Id = l.Id,
+                                Name = l.Name,
+                                Price = l.Price,
+                                Availability = l.Price > 0,
+                                BrandId = l.BrandId,
+                                SizeId = l.SizeId,
+                                SubcategoryId = l.SubcategoryId
+                            }).ToList();
+                    list.Select(a => a.Id).Distinct();
+                }
+
+                if (context.UserBrandsFilter.Where(a => a.UserId == id).Any()) // same a sprevious
+                {
+                    list = (from l in list
+                            join ub in context.UserBrandsFilter.Where(a => a.UserId == id)
+                            on l.BrandId equals ub.BrandId
+                            select new ClothingItemsListItem
+                            {
+                                Id = l.Id,
+                                Name = l.Name,
+                                Price = l.Price,
+                                Availability = l.Price > 0,
+                                BrandId = l.BrandId,
+                                SizeId = l.SizeId,
+                                SubcategoryId = l.SubcategoryId
+                            }).ToList();
+                    list.Select(a => a.Id).Distinct(); // only original Id's so that we dont have duplicate items
+                }
                 return list;
             }
         }
@@ -78,78 +129,6 @@ namespace ClothingShop.Services
                 context.SaveChanges();
 
                 return true;
-            }
-        }
-
-        public List<ClothingItemsListItem> ListItems(Guid id) // filter and show all the products 
-        {
-            using (var context = new ClothingShopDbContext())
-            {
-                List<ClothingItemsListItem> list = context.ClothingItemsSizes.Select(a => new ClothingItemsListItem
-                {
-                    Id = a.ClothingItem.Id,
-                    Name = a.ClothingItem.Name,
-                    Price = a.ClothingItem.Price,
-                    Availability = a.Quantity > 0,
-                    BrandId = a.ClothingItem.BrandId,
-                    SizeId = a.SizeId,
-                    SubcategoryId = a.ClothingItem.SubcategoryId
-                }).ToList();
-
-                if (context.UserSubcategoriesFilter.Where(a => a.UserId == id).Any())
-                {
-                    list = (from l in list
-                            join sub in context.UserSubcategoriesFilter.Where(a => a.UserId == id)
-                            on l.SubcategoryId equals sub.SubcategoryId
-                            select new ClothingItemsListItem
-                            {
-                                Id = l.Id,
-                                Name = l.Name,
-                                Price = l.Price,
-                                Availability = l.Price > 0,
-                                BrandId = l.BrandId,
-                                SizeId = l.SizeId,
-                                SubcategoryId = l.SubcategoryId
-                            }).ToList();
-                    list.Select(a => a.Id).Distinct();
-                }
-
-                if (context.UserSizesFilter.Where(a => a.UserId == id).Any())
-                {
-                    list = (from l in list
-                            join us in context.UserSizesFilter.Where(a => a.UserId == id)
-                            on l.SizeId equals us.SizeId
-                            select new ClothingItemsListItem
-                            {
-                                Id = l.Id,
-                                Name = l.Name,
-                                Price = l.Price,
-                                Availability = l.Price > 0,
-                                BrandId = l.BrandId,
-                                SizeId = l.SizeId,
-                                SubcategoryId = l.SubcategoryId
-                            }).ToList();
-                    list.Select(a => a.Id).Distinct();
-                }
-
-                if (context.UserBrandsFilter.Where(a => a.UserId == id).Any())
-                {
-                    list = (from l in list
-                            join ub in context.UserBrandsFilter.Where(a => a.UserId == id)
-                            on l.BrandId equals ub.BrandId
-                            select new ClothingItemsListItem
-                            {
-                                Id = l.Id,
-                                Name = l.Name,
-                                Price = l.Price,
-                                Availability = l.Price > 0,
-                                BrandId = l.BrandId,
-                                SizeId = l.SizeId,
-                                SubcategoryId = l.SubcategoryId
-                            }).ToList();
-                    list.Select(a => a.Id).Distinct();
-                }
-                return list;
             }
         }
     }
