@@ -52,5 +52,46 @@ namespace ClothingShop.Services
                 return true;
             }
         }
+
+        public List<DTO.UserSubcategoriesFilter> SubcategoriesFilter(Guid id)
+        // join Subcategories table with UserSubcategories table to see which Subcategories user ticked
+        {
+            using (var context = new ClothingShopDbContext())
+            {
+                List<DTO.UserSubcategoriesFilter> brandFilter = (from b in context.Subcategories
+                                                      join us in context.UserSubcategoriesFilter.Where(a => a.UserId == id)
+                                                      on b.Id equals us.SubcategoryId
+                                                      select new DTO.UserSubcategoriesFilter
+                                                      {
+                                                          Id = b.Id,
+                                                          Name = b.Name,
+                                                          Enabled = us != null
+                                                      }).ToList();
+
+                return brandFilter;
+            }
+        }
+
+        public bool UserSubcategoriesEnable(UserSubcategoriesEnable model) // adds or removes a userSubcategory to/from table
+        {
+            using (var context = new ClothingShopDbContext())
+            {
+                Models.UserSubcategoriesFilter filter = context.UserSubcategoriesFilter.Where
+                    (a => a.SubcategoryId == model.SubcategoryId && a.UserId == model.UserId).FirstOrDefault();
+                if (filter != null)
+                    context.UserSubcategoriesFilter.Remove(filter);
+                else
+                {
+                    filter = new Models.UserSubcategoriesFilter
+                    {
+                        UserId = model.UserId,
+                        SubcategoryId = model.SubcategoryId
+                    };
+                    context.UserSubcategoriesFilter.Add(filter);
+                }
+                context.SaveChanges();
+                return true;
+            }
+        }
     }
 }

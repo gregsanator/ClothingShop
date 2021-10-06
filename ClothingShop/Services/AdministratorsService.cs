@@ -102,7 +102,14 @@ namespace ClothingShop.Services
                 a.AdministratorId == model.AdministratorId).FirstOrDefault();
 
                 if (administratorPermission == null)
-                    context.AdministratorsPermissions.Add(administratorPermission);
+                {
+                    AdministratorsPermissions ap = new AdministratorsPermissions
+                    {
+                        AdministratorId = model.AdministratorId,
+                        PermissionId = model.PermissionId
+                    };
+                    context.AdministratorsPermissions.Add(ap);
+                }
 
                 else
                     context.AdministratorsPermissions.Remove(administratorPermission);

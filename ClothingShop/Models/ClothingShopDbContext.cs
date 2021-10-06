@@ -14,6 +14,10 @@ namespace ClothingShop.Models
         }
 
         public DbSet<Administrators> Administrators { get; set; }
+        public DbSet<Brands> Brands { get; set; }
+        public DbSet<UserSizesFilter> UserSizesFilter { get; set; }
+        public DbSet<UserBrandFilter> UserBrandsFilter { get; set; }
+        public DbSet<UserSubcategoriesFilter> UserSubcategoriesFilter { get; set; }
         public DbSet<AdministratorsPermissions> AdministratorsPermissions { get; set; }
         public DbSet<Users> Users { get; set; }
         public DbSet<Categories> Categories { get; set; }

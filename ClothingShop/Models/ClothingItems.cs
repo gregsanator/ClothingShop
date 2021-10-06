@@ -17,9 +17,13 @@ namespace ClothingShop.Models
         public Subcategories Subcategory { get; set; }
 
 
+        [ForeignKey("Brand")]
+        public Guid BrandId { get; set; }
+        public Brands Brand { get; set; }
+
+
         public string Name { get; set; }
         public int Gender { get; set; }
-        public string BrandName { get; set; }
         public string Description { get; set; }
         public double Price { get; set; }
         public int SizeType { get; set; }

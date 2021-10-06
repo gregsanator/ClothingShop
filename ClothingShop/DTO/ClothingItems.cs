@@ -10,6 +10,9 @@ namespace ClothingShop.DTO
         public class ClothingItemsListItem
         {
             public Guid Id { get; set; }
+            public Guid SubcategoryId { get; set; }
+            public Guid SizeId { get; set; }
+            public Guid BrandId { get; set; }
             public string Name { get; set; }
             public bool Availability { get; set; }
             public double Price { get; set; }
@@ -30,13 +33,20 @@ namespace ClothingShop.DTO
             public Guid Id { get; set; }
             public Guid SubcategoryId { get; set; }
             public Guid SizeId { get; set; }
+            public Guid BrandId { get; set; }
             public string Name { get; set; }
             public int Gender { get; set; }
-            public string BrandName { get; set; }
             public string Description { get; set; }
             public double Price { get; set; }
             public int SizeType { get; set; }
 
+        }
+
+        public class FilterItems
+        {
+            public List<Guid> Sizes { get; set; }
+            public List<Guid> Brands { get; set; }
+            public List<Guid> Subcategories { get; set; }
         }
     }
 }

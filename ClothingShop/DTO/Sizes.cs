@@ -28,5 +28,18 @@ namespace ClothingShop.DTO
             public string Size { get; set; }
             public bool Enabled { get; set; }
         }
+
+        public class UserSizesFilter
+        {
+            public Guid Id { get; set; }
+            public string Size { get; set; }
+            public bool Enabled { get; set; }
+        }
+
+        public class UserSizeEnable
+        {
+            public Guid SizeId { get; set; }
+            public Guid UserId { get; set; }
+        }
     }
 }

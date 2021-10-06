@@ -18,7 +18,7 @@ namespace ClothingShop.Services
                 {
                     Id = a.Id,
                     SizeType = a.SizeType,
-                    Size =a.Size
+                    Size = a.Size
                 }).ToList();
 
                 return list;
@@ -55,12 +55,12 @@ namespace ClothingShop.Services
         {
             using (var context = new ClothingShopDbContext())
             {
-                int sizeType = context.ClothingItems.Where(a => a.Id == id).Select(a => a.SizeType).FirstOrDefault();
+                int sizeType = context.ClothingItems.Where(a => a.Id == id).Select(a => a.SizeType).FirstOrDefault(); // get me the sizetype of the product
 
-                List<ClothingItemSizes> sizes = (from s in context.Sizes.Where(a => a.SizeType == sizeType)
-                                                 join cis in context.ClothingItemsSizes.Where(a => a.ClothingItemId == id)
+                List<ClothingItemSizes> sizes = (from s in context.Sizes.Where(a => a.SizeType == sizeType) // from sizes give me all size with the sizetype above
+                                                 join cis in context.ClothingItemsSizes.Where(a => a.ClothingItemId == id)//all the sizes of the clothingitem
                                                  on s.Id equals cis.SizeId into joinedscis
-                                                 from scis in joinedscis.DefaultIfEmpty()
+                                                 from scis in joinedscis.DefaultIfEmpty()// load all sizes but enabled is true if it is in stock
                                                  select new ClothingItemSizes
                                                  {
                                                      SizeId = s.Id,
@@ -69,6 +69,46 @@ namespace ClothingShop.Services
 
                                                  }).ToList();
                 return sizes;
+            }
+        }
+
+        public List<DTO.Sizes.UserSizesFilter> SizeFilter(Guid id)
+        // join Sizes table with UserSizes table to see which sizes user ticked
+        {
+            using (var context = new ClothingShopDbContext())
+            {
+                List<DTO.Sizes.UserSizesFilter> sizeFilter = (from s in context.Sizes
+                                                    join us in context.UserSizesFilter.Where(a => a.UserId == id)
+                                                    on s.Id equals us.SizeId
+                                                    select new DTO.Sizes.UserSizesFilter
+                                                    {
+                                                        Id = s.Id,
+                                                        Size = s.Size,
+                                                        Enabled = us != null
+                                                    }).ToList();
+
+                return sizeFilter;
+            }
+        }
+
+        public bool UserSizeEnable(UserSizeEnable model) // adds or removes a userSize to/from table
+        {
+            using (var context = new ClothingShopDbContext())
+            {
+                Models.UserSizesFilter userSize = context.UserSizesFilter.Where(a => a.UserId == model.UserId && a.SizeId == model.SizeId).FirstOrDefault();
+                if (userSize != null)
+                    context.UserSizesFilter.Remove(userSize);
+                else
+                {
+                    Models.UserSizesFilter us = new Models.UserSizesFilter
+                    {
+                        SizeId = model.SizeId,
+                        UserId = model.UserId
+                    };
+                    context.UserSizesFilter.Add(us);
+                }
+                context.SaveChanges();
+                return true;
             }
         }
     }

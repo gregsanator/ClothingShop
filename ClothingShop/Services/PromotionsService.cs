@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using ClothingItems = ClothingShop.Models.ClothingItems;
 
 namespace ClothingShop.Services
 {
@@ -73,16 +74,36 @@ namespace ClothingShop.Services
             using (var context = new ClothingShopDbContext())
             {
                 List<ClothingItemPromotion> itemsInPromotion = (from c in context.ClothingItems
-                                                    join cip in context.ClothingItemsPromotions.Where(a => a.PromotionId == id)
-                                                    on c.Id equals cip.ClothingItemId into joinedccip
-                                                    from ccip in joinedccip.DefaultIfEmpty()
-                                                    select new ClothingItemPromotion
-                                                    {
-                                                        Id = c.Id,
-                                                        ProductName = c.Name,
-                                                        Enabled = ccip != null
-                                                    }).ToList();
+                                                                join cip in context.ClothingItemsPromotions.Where(a => a.PromotionId == id)
+                                                                on c.Id equals cip.ClothingItemId into joinedccip
+                                                                from ccip in joinedccip.DefaultIfEmpty()
+                                                                select new ClothingItemPromotion
+                                                                {
+                                                                    Id = c.Id,
+                                                                    ProductName = c.Name,
+                                                                    Enabled = ccip != null
+                                                                }).ToList();
                 return itemsInPromotion;
+            }
+        }
+
+        public bool EnableAll(Guid id) // add all the products of a given subcategory to a promotion(example. all hoodies have 30% discount)
+        {
+            using (var context = new ClothingShopDbContext())
+            {
+                List<ClothingItemsPromotions> promotions = context.ClothingItems.Where(a => a.Subcategory.Id == id).Select(a => new ClothingItemsPromotions
+                {
+                    ClothingItemId = a.Id,
+                    PromotionId = a.Subcategory.Id
+                }).ToList();
+
+                foreach (var item in promotions)
+                {
+                    Models.ClothingItems clothingItem = context.ClothingItems.Where(a => a.Id == item.ClothingItemId).FirstOrDefault();
+                    clothingItem.Price *= (1 - (item.Promotion.DiscountPercantage / 100));
+                    context.ClothingItemsPromotions.Add(item);
+                }
+                return true;
             }
         }
 
