@@ -9,9 +9,12 @@ namespace ClothingShop.DTO
     {
         public class ClothingItemsSizesListItem
         {
-            public Guid Id { get; set; }
+            public Guid ClothingItemId { get; set; }
             public string Name { get; set; }
-            public string Size { get; set; }
+            public List<string> SizesInStock { get; set; }
+            public List<string> SizesNotInStock { get; set; }
+            public List<string> LocationsInStock { get; set; }
+            public List<string> LocationsOutOfStock { get; set; }
             public double Quantity { get; set; }
         }
 
@@ -20,6 +23,7 @@ namespace ClothingShop.DTO
             public Guid Id { get; set; }
             public Guid SizeId { get; set; }
             public Guid ClothingItemId { get; set; }
+            public Guid ShopId { get; set; }
             public double Quantity { get; set; }
         }
     }

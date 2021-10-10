@@ -97,6 +97,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AdministratorsController.cs" />
+    <Compile Include="Controllers\BrandsController.cs" />
     <Compile Include="Controllers\CartsController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\ClothingItemsController.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="DTO\ClothingItemsSizes.cs" />
     <Compile Include="DTO\Promotions.cs" />
     <Compile Include="DTO\Purchases.cs" />
+    <Compile Include="DTO\Shops.cs" />
     <Compile Include="DTO\Sizes.cs" />
     <Compile Include="DTO\Subcategories.cs" />
     <Compile Include="DTO\Users.cs" />
@@ -150,6 +152,7 @@
     <Compile Include="Services\ClothingItemsSizesService.cs" />
     <Compile Include="Services\PromotionsService.cs" />
     <Compile Include="Services\PurchasesService.cs" />
+    <Compile Include="Services\ShopsService.cs" />
     <Compile Include="Services\SizesService.cs" />
     <Compile Include="Services\SubcategoriesService.cs" />
     <Compile Include="Services\UsersService.cs" />
@@ -171,6 +174,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Data\" />
     <Folder Include="Views\Administrators\" />
+    <Folder Include="Views\Brands\" />
     <Folder Include="Views\Carts\" />
     <Folder Include="Views\Categories\" />
     <Folder Include="Views\ClothingItems\" />

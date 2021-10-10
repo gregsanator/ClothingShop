@@ -72,7 +72,7 @@ namespace ClothingShop.Services
             }
         }
 
-        public List<DTO.Sizes.UserSizesFilter> SizeFilter(Guid id)
+        /*public List<DTO.Sizes.UserSizesFilter> SizeFilter(Guid id)
         // join Sizes table with UserSizes table to see which sizes user ticked
         {
             using (var context = new ClothingShopDbContext())
@@ -110,6 +110,6 @@ namespace ClothingShop.Services
                 context.SaveChanges();
                 return true;
             }
-        }
+        }*/
     }
 }

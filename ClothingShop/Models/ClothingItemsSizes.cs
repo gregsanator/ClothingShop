@@ -20,6 +20,11 @@ namespace ClothingShop.Models
         public Guid SizeId { get; set; }
         public Sizes Size { get; set; }
 
+
+        [ForeignKey("Shop")]
+        public Guid ShopId { get; set; }
+        public Shops Shop { get; set; }
+
         public double Quantity { get; set; }
     }
 }

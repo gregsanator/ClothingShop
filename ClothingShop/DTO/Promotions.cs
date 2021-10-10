@@ -42,7 +42,28 @@ namespace ClothingShop.DTO
 
     public class ClothingItemInPromotionEnabled
     {
-        public Guid ClothingItemId { get; set; }
+        public List<Guid> ClothingItemId { get; set; }
         public Guid PromotionId { get; set; }
+    }
+
+    public class SelectedItemsEnable
+    {
+        public Guid? SubcategoryId { get; set; }
+        public List<Guid> ClothingItemsId { get; set; }
+        public Guid PromotionId { get; set; }
+    }
+
+    public class CategoryPromotionEnabled
+    {
+        public Guid PromotionId { get; set; }
+        public Guid SubcategoryId { get; set; }
+
+    }
+
+    public class SubcategoriesPromotion
+    {
+        public Guid Id { get; set; }
+        public string SubcategoryName { get; set; }
+        public bool Enabled { get; set; }
     }
 }

@@ -10,12 +10,12 @@ namespace ClothingShop.Controllers
 {
     public class ClothingItemsController : ApiController
     {
-        [Route("api/clothingshop/clothingItems/list/{id}")]
-        [HttpGet]
-        public IHttpActionResult List(Guid id)
+        [Route("api/clothingshop/clothingItems/list")]
+        [HttpPost]
+        public IHttpActionResult List(FilterItems filter)
         {
             ClothingItemsService service = new ClothingItemsService();
-            List<ClothingItemsListItem> list = service.List(id);
+            List<ClothingItemsListItem> list = service.List(filter);
             return Ok(list);
         }
 

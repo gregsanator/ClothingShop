@@ -46,7 +46,7 @@ namespace ClothingShop.Services
             }
         }
 
-        public List<UserBrandsFilter> brandFilter(Guid id)
+        /*public List<UserBrandsFilter> brandFilter(Guid id)
         // join Brands table with UserBrands table to see which Brands user ticked
         {
             using (var context = new ClothingShopDbContext())
@@ -84,6 +84,6 @@ namespace ClothingShop.Services
                 context.SaveChanges();
                 return true;
             }
-        }
+        }*/
     }
 }

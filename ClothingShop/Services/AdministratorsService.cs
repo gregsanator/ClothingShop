@@ -43,7 +43,7 @@ namespace ClothingShop.Services
                 Administrators admin = new Administrators
                 {
                     Id = save.Id,
-                    EMail= save.EMail,
+                    EMail = save.EMail,
                     Password = save.Password,
                     Name = save.Name,
                     Surname = save.Surname,
@@ -81,15 +81,15 @@ namespace ClothingShop.Services
             using (var context = new ClothingShopDbContext())
             {
                 List<AdministratorPermissions> joined = (from p in context.Permissions
-                                                          join ap in context.AdministratorsPermissions.Where(a => a.AdministratorId == id)
-                                                          on p.Id equals ap.PermissionId into joinedpap
-                                                          from pap in joinedpap.DefaultIfEmpty()
-                                                          select new AdministratorPermissions
-                                                          {
-                                                              Id = p.Id,
-                                                              Name = p.Name,
-                                                              Enabled = pap != null
-                                                          }).ToList();
+                                                         join ap in context.AdministratorsPermissions.Where(a => a.AdministratorId == id)
+                                                         on p.Id equals ap.PermissionId into joinedpap
+                                                         from pap in joinedpap.DefaultIfEmpty()
+                                                         select new AdministratorPermissions
+                                                         {
+                                                             Id = p.Id,
+                                                             Name = p.Name,
+                                                             Enabled = pap != null
+                                                         }).ToList();
                 return joined;
             }
         }

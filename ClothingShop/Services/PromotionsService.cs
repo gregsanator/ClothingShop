@@ -87,49 +87,48 @@ namespace ClothingShop.Services
             }
         }
 
-        public bool EnableAll(Guid id) // add all the products of a given subcategory to a promotion(example. all hoodies have 30% discount)
+        public bool AddSelected(SelectedItemsEnable model) // add all the products of a given subcategory to a promotion(example. all hoodies have 30% discount)
         {
             using (var context = new ClothingShopDbContext())
             {
-                List<ClothingItemsPromotions> promotions = context.ClothingItems.Where(a => a.Subcategory.Id == id).Select(a => new ClothingItemsPromotions
-                {
-                    ClothingItemId = a.Id,
-                    PromotionId = a.Subcategory.Id
-                }).ToList();
+                IQueryable <ClothingItems> cItems = context.ClothingItems;
 
-                foreach (var item in promotions)
-                {
-                    Models.ClothingItems clothingItem = context.ClothingItems.Where(a => a.Id == item.ClothingItemId).FirstOrDefault();
-                    clothingItem.Price *= (1 - (item.Promotion.DiscountPercantage / 100));
-                    context.ClothingItemsPromotions.Add(item);
-                }
-                return true;
-            }
-        }
+                if (model.SubcategoryId != null)
+                    cItems = cItems.Where(a => a.SubcategoryId == model.SubcategoryId); 
+                // see if he has selected subcategory chebox to add all items in subcateg
 
-
-        public bool AddItemToPromotion(ClothingItemInPromotionEnabled model) // list with products and checkboxes when click checkbox call this service
-        {
-            using (var context = new ClothingShopDbContext())
-            {
-                ClothingItemsPromotions clothingItem = context.ClothingItemsPromotions
-                    .Where(a => a.ClothingItemId == model.ClothingItemId && a.PromotionId == model.PromotionId).FirstOrDefault();
-
-                Models.ClothingItems item = context.ClothingItems.Where(a => a.Id == clothingItem.ClothingItemId).FirstOrDefault();
-
-                if (clothingItem != null)
-                {
-                    item.Price /= (1 - (clothingItem.Promotion.DiscountPercantage / 100));
-                    // Changeing the price back to the original one without any discount
-                    context.ClothingItemsPromotions.Remove(clothingItem);
-                }
+                else if (model.ClothingItemsId.Count != 0)
+                    cItems = cItems.Where(a => model.ClothingItemsId.Contains(a.Id));
 
                 else
-                {
-                    item.Price *= (1 - (clothingItem.Promotion.DiscountPercantage / 100));
-                    // Adding discount to the price
-                    context.ClothingItemsPromotions.Add(clothingItem);
-                }
+                    return false;
+
+                double discountPercantage = context.Promotions.Find(model.PromotionId).DiscountPercantage;
+
+                    foreach (var item in cItems)
+                    {
+                        ClothingItemsPromotions cip = new ClothingItemsPromotions
+                        {
+                            ClothingItemId = item.Id,
+                            PromotionId = model.PromotionId
+                        };
+
+                        ClothingItemsPromotions any = context.ClothingItemsPromotions.Where(a => a.ClothingItemId == item.Id).FirstOrDefault();
+                        // check if there is existing promotion on item
+
+                        if (any == null)
+                        {
+                            item.Price *= (1 - (discountPercantage / 100)); // calculate new price of item
+                        }
+                        else
+                        {
+                            item.Price /= (1 - (any.Promotion.DiscountPercantage / 100)); // bring back the original price
+                            item.Price *= (1 - (discountPercantage / 100)); // calculate the new price
+                            context.ClothingItemsPromotions.Remove(any); // remove old promotion
+                        }
+                        context.ClothingItemsPromotions.Add(cip); // add the item to the promotion
+                    }
+                    context.SaveChanges();
                 return true;
             }
         }

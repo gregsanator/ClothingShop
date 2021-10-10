@@ -53,7 +53,7 @@ namespace ClothingShop.Services
             }
         }
 
-        public List<DTO.UserSubcategoriesFilter> SubcategoriesFilter(Guid id)
+        /*public List<DTO.UserSubcategoriesFilter> SubcategoriesFilter(Guid id)
         // join Subcategories table with UserSubcategories table to see which Subcategories user ticked
         {
             using (var context = new ClothingShopDbContext())
@@ -92,6 +92,6 @@ namespace ClothingShop.Services
                 context.SaveChanges();
                 return true;
             }
-        }
+        }*/
     }
 }
