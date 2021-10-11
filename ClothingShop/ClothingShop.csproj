@@ -101,6 +101,11 @@
     <Compile Include="Controllers\CartsController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\ClothingItemsController.cs" />
+    <Compile Include="Controllers\CothingItemsSizesController.cs" />
+    <Compile Include="Controllers\PromotionstController.cs" />
+    <Compile Include="Controllers\PurchasesController.cs" />
+    <Compile Include="Controllers\ShopsController.cs" />
+    <Compile Include="Controllers\SizesController.cs" />
     <Compile Include="Controllers\SubcategoriesController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="DTO\Administrators.cs" />
@@ -178,6 +183,11 @@
     <Folder Include="Views\Carts\" />
     <Folder Include="Views\Categories\" />
     <Folder Include="Views\ClothingItems\" />
+    <Folder Include="Views\CothingItemsSizes\" />
+    <Folder Include="Views\Promotionst\" />
+    <Folder Include="Views\Purchases\" />
+    <Folder Include="Views\Shops\" />
+    <Folder Include="Views\Sizes\" />
     <Folder Include="Views\Subcategories\" />
     <Folder Include="Views\Users\" />
   </ItemGroup>

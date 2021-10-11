@@ -71,7 +71,7 @@ namespace ClothingShop.Services
             }
         }
 
-        public bool PurchaseItems(Guid id)
+        public bool PurchaseItems(Guid id) // ?? dali e podobro da dobie id na user ili ke dobie lista od id-nja na cartovi ?
         {
             using (var context = new ClothingShopDbContext())
             {

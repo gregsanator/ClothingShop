@@ -55,7 +55,7 @@ namespace ClothingShop.Services
         {
             using (var context = new ClothingShopDbContext())
             {
-                int sizeType = context.ClothingItems.Where(a => a.Id == id).Select(a => a.SizeType).FirstOrDefault(); // get me the sizetype of the product
+                int sizeType = context.ClothingItems.Where(a => a.Id == id).FirstOrDefault().SizeType; // get me the sizetype of the product
 
                 List<ClothingItemSizes> sizes = (from s in context.Sizes.Where(a => a.SizeType == sizeType) // from sizes give me all size with the sizetype above
                                                  join cis in context.ClothingItemsSizes.Where(a => a.ClothingItemId == id)//all the sizes of the clothingitem

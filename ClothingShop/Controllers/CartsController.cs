@@ -10,12 +10,12 @@ namespace ClothingShop.Controllers
 {
     public class CartsController : ApiController
     {
-        [Route("api/clothingshop/carts/list")]
+        [Route("api/clothingshop/carts/list/{id}")]
         [HttpGet]
         public IHttpActionResult List(Guid id)
         {
             CartsService service = new CartsService();
-            List<CartsListItem> list = service.List(id);
+            CartsListItem list = service.List(id);
             return Ok(list);
         }
 
@@ -38,21 +38,12 @@ namespace ClothingShop.Controllers
             return Ok(success);
         }
 
-        [Route("api/clothingshop/carts/totalprice/{id}")]
-        [HttpGet]
-        public IHttpActionResult TotalPrice(Guid id)
+        [Route("api/clothingshop/carts/purchaseitems")]
+        [HttpPost]
+        public IHttpActionResult PurchaseItems(Guid id)
         {
             CartsService service = new CartsService();
-            double totalPrice = service.TotalPrice(id);
-            return Ok(totalPrice);
-        }
-
-        [Route("api/clothingshop/carts/totalprice/{id}")]
-        [HttpGet]
-        public IHttpActionResult CartsCheckOut(Guid id)
-        {
-            CartsService service = new CartsService();
-            bool success = service.CartsCheckOut(id);
+            bool success = service.PurchaseItems(id);
             return Ok(success);
         }
     }
