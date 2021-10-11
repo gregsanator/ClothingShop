@@ -97,7 +97,7 @@ namespace ClothingShop.Services
                     cItems = cItems.Where(a => a.SubcategoryId == model.SubcategoryId); 
                 // see if he has selected subcategory chebox to add all items in subcateg
 
-                else if (model.ClothingItemsId.Count != 0)
+                else if (model.ClothingItemsId.Any())
                     cItems = cItems.Where(a => model.ClothingItemsId.Contains(a.Id));
 
                 else
@@ -117,9 +117,7 @@ namespace ClothingShop.Services
                         // check if there is existing promotion on item
 
                         if (any == null)
-                        {
                             item.Price *= (1 - (discountPercantage / 100)); // calculate new price of item
-                        }
                         else
                         {
                             item.Price /= (1 - (any.Promotion.DiscountPercantage / 100)); // bring back the original price

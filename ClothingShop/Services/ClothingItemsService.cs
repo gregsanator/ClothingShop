@@ -17,11 +17,11 @@ namespace ClothingShop.Services
                 if (filter.Search.Length != 0)
                     items = items.Where(a => a.ClothingItem.Name.Contains(filter.Search) || a.ClothingItem.Brand.Name.Contains(filter.Search));
 
-                else if (filter.Subcategories.Any() || filter.Sizes.Any() || filter.Brands.Any())
+                else
                 {
-                    items = items.Where(a => filter.Subcategories.Contains(a.ClothingItem.SubcategoryId) && // there is no entry
-                                            filter.Sizes.Contains(a.SizeId) &&
-                                        filter.Brands.Contains(a.ClothingItem.BrandId) &&
+                    items = items.Where(a => (!filter.Subcategories.Any() || filter.Subcategories.Contains(a.ClothingItem.SubcategoryId)) && // there is no entry
+                                            (!filter.Sizes.Any() || filter.Sizes.Contains(a.SizeId)) &&
+                                        (!filter.Brands.Any() || filter.Brands.Contains(a.ClothingItem.BrandId)) &&
                                         a.ClothingItem.Price >= filter.LowestPrice &&
                                         a.ClothingItem.Price <= filter.HighestPrice);
                 }
