@@ -20,6 +20,10 @@ namespace ClothingShop.Models
         public Guid ClothingItemSizeId { get; set; }
         public ClothingItemsSizes ClothingItemSize { get; set; }
 
+        [ForeignKey("Promotion")]
+        public Guid? PromotionId { get; set; }
+        public Promotions Promotion { get; set; }
+
 
         public double Quantity { get; set; }
         public double TotalPrice { get; set; }

@@ -27,6 +27,7 @@ namespace ClothingShop.Models
         public string Description { get; set; }
         public double Price { get; set; }
         public int SizeType { get; set; }
+        public DateTime DateAdded { get; set; }
 
     }
 }

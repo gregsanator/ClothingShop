@@ -14,6 +14,7 @@ namespace ClothingShop.DTO
             public string Name { get; set; }
             public bool Availability { get; set; }
             public double Price { get; set; }
+            public DateTime DateAdded { get; set; }
         }
 
         public class ClothingItemsForm
@@ -48,6 +49,7 @@ namespace ClothingShop.DTO
             public string Search { get; set; }
             public double LowestPrice { get; set; }
             public double HighestPrice { get; set; }
+            public int Sort { get; set; }
         }
 
         public class Filter

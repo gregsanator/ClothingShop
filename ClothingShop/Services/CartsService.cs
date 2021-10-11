@@ -11,7 +11,7 @@ namespace ClothingShop.Services
     {
         public CartsListItem List(Guid id) // list all the items that are inside the cart for a given user 
         {
-            using(var context = new ClothingShopDbContext())
+            using (var context = new ClothingShopDbContext())
             {
                 CartsListItem item = new CartsListItem();
                 item.CartList = context.Carts.Where(a => a.UserId == id).Select(a => new CartsList
@@ -84,10 +84,12 @@ namespace ClothingShop.Services
                         Quantity = item.Quantity,
                         TotalPrice = item.ClothingItemSize.ClothingItem.Price * item.Quantity * (1 - (item.User.ClubCards.DiscountPercantage / 100)),
                         DateOrdered = DateTime.Now,
-                        DiscountPercantage = item.User.ClubCards.DiscountPercantage
+                        DiscountPercantage = item.User.ClubCards.DiscountPercantage,
+                        PromotionId = context.ClothingItemsPromotions.Where
+                            (a => a.ClothingItemId == item.ClothingItemSize.ClothingItem.Id).FirstOrDefault().ClothingItem.Id
                     };
 
-                    if(context.Users.Where(a => a.Id == id).Any())
+                    if (context.Users.Where(a => a.Id == id).Any())
                     {
                         ClubCards clubCard = context.ClubCards.Where(a => a.UserId == id).FirstOrDefault();
                         clubCard.Points += purchase.TotalPrice / 10; // adjusting the points of the user's clubcard(adding total price / 100 to the total points)

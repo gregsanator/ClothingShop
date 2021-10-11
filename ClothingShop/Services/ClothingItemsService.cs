@@ -33,8 +33,17 @@ namespace ClothingShop.Services
                     Name = a.ClothingItem.Name,
                     Price = a.ClothingItem.Price,
                     Availability = a.Quantity > 0,
-                    BrandName = a.ClothingItem.Brand.Name
+                    BrandName = a.ClothingItem.Brand.Name,
+                    DateAdded = a.ClothingItem.DateAdded
                 }).ToList();
+
+                //Sorting values 
+                    if (filter.Sort == 1)// Price filter Lowest -> Highest
+                        list.OrderBy(a => a.Price);
+                    else if (filter.Sort == 2) // Highest -> Lowest
+                        list.OrderByDescending(a => a.Price);
+                    else if (filter.Sort == 3) // Newest
+                        list.OrderByDescending(a => a.DateAdded);
 
                 return list;
             }
@@ -71,7 +80,8 @@ namespace ClothingShop.Services
                     Gender = model.Gender,
                     SubcategoryId = model.SubcategoryId,
                     Price = model.Price,
-                    SizeType = model.SizeType
+                    SizeType = model.SizeType,
+                    DateAdded = DateTime.Now
                 };
 
                 if (item.Id != Guid.Empty)
