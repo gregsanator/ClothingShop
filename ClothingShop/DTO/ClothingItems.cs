@@ -46,17 +46,12 @@ namespace ClothingShop.DTO
             public List<Guid> Sizes { get; set; }
             public List<Guid> Brands { get; set; }
             public List<Guid> Subcategories { get; set; }
-            public string Search { get; set; }
-            public double LowestPrice { get; set; }
-            public double HighestPrice { get; set; }
-            public int Sort { get; set; }
         }
 
-        public class Filter
+        public class PriceFilters
         {
-            public List<Guid> Filters { get; set; }
-            public double LowestPrice { get; set; }
-            public double HighestPrice { get; set; }
+            public double? LowestPrice { get; set; }
+            public double? HighestPrice { get; set; }
         }
     }
 }

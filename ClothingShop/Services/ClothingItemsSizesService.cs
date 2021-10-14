@@ -10,7 +10,27 @@ namespace ClothingShop.Services
     public class ClothingItemsSizesService
     {
         //This service is for the head administrators to see the total stock number of a ClothingItemSIze
-        public List<ClothingItemsSizesListItem> List(string brandName) //list the availabillity of a certain product with a certain size
+        public List<StockInformation> ListStockInfo(Guid id)
+        {
+            using (var context = new ClothingShopDbContext())
+            {
+                //group all items where clothingItemId is equal to passed id(admin clicks on air max 7 item)
+               List<StockInformation> list = (from l in context.ClothingItemsSizes.Where(a => a.ClothingItemId == id)
+                        group l by new { l.ClothingItemId, l.Shop.Name, l.InStock} into cisGroup
+                        select new StockInformation
+                        {
+                            ItemId = cisGroup.Key.ClothingItemId, //item id // it gives error because of both prop in clothingItem and shop have prop Name
+                            Shop = cisGroup.Key.Name, // shop name
+                            InStock = cisGroup.Key.InStock, // is itemSize in stock
+                            ItemSizes = cisGroup.Select(a => a.Size.Size).ToList(),
+                            Quantity = cisGroup.Sum(a => a.Quantity)
+                            // all the sizes that are/aren't in stock for that item in a shop
+                        }).ToList();
+                return list;
+            }
+        }
+
+        public List<ClothingItemsSizesListItem> List(string brandName) //global management of the shop
         {
             using (var context = new ClothingShopDbContext())
             {
@@ -18,24 +38,18 @@ namespace ClothingShop.Services
                 if (brandName != null)
                     itemsSizes = itemsSizes.Where(a => a.ClothingItem.Brand.Name == brandName);
 
-                List<ClothingItemsSizesListItem> list = (from i in itemsSizes
-                                                         group i by i.ClothingItemId into cisGroup
-                                                         select new ClothingItemsSizesListItem
-                                                         {
-                                                             ClothingItemId = cisGroup.Key,
-                                                             Name = cisGroup.Select(a => a.ClothingItem.Name).FirstOrDefault(),
-                                                             Quantity = cisGroup.Sum(a => a.Quantity),
-                                                             SizesInStock = cisGroup.Select(a => a.Size.Size).ToList(),
-                                                             LocationsInStock = cisGroup.Select(a => a.Shop.Location).ToList(),
-                                                             LocationsOutOfStock = context.Shops.Select(a => a.Name).
-                                                                Except(cisGroup.Select(a => a.Shop.Location)).ToList(),
-                                                             SizesNotInStock = context.Sizes.Where
-                                                                (a => a.SizeType == cisGroup.Select(b => b.Size.SizeType).FirstOrDefault()).Select(a => a.Size).
-                                                                Except(cisGroup.Select(a => a.Size.Size)).ToList()
-                                                         }).ToList();
+                itemsSizes.Select(a => a.ClothingItemId).Distinct(); // eliminate all duplicate clothingItems so that we are left only with one sample of the item
+
+                List<ClothingItemsSizesListItem> list = itemsSizes.Select(a => new ClothingItemsSizesListItem
+                {
+                    ItemName = a.ClothingItem.Name,
+                    ItemId = a.ClothingItemId
+                }).ToList();
+
                 return list;
             }
         }
+
 
         public bool Save(ClothingItemSizesSave model)
         // Add the quantity of stock of a certain product with a certain size

@@ -26,5 +26,6 @@ namespace ClothingShop.Models
         public Shops Shop { get; set; }
 
         public double Quantity { get; set; }
+        public bool InStock { get; set; }
     }
 }
