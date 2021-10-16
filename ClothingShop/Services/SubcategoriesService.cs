@@ -12,18 +12,18 @@ namespace ClothingShop.Services
         public List<SubcategoriesListItem> List(Guid id)
         //list all subcategories for a categorie with a given id, if id is null than list all subcategories
         {
-            using (var context = new ClothingShopDbContext())
+            using (var context = new ClothingShopDbContext()) // group join so that we can see the total number of items that is in the subcategory
             {
-                IQueryable<Subcategories> subcategories = context.Subcategories;
-                if (id != null)
-                    subcategories.Where(a => a.CategoryId == id);
+                List<SubcategoriesListItem> list = (from s in context.Subcategories.Where(a => a.CategoryId == id)
+                                                    join c in context.ClothingItems
+                                                    on s.Id equals c.SubcategoryId into Groupedsc
+                                                    select new SubcategoriesListItem
+                                                    {
+                                                        Id = s.Id,
+                                                        Name = s.Name,
+                                                        NumberOfItems = Groupedsc.Count()
+                                                    }).ToList();
 
-                List<SubcategoriesListItem> list = subcategories.Select(a => new SubcategoriesListItem
-                {
-                    Id = a.Id,
-                    Name = a.Name,
-                    NumberOfItems = context.ClothingItems.Where(b => b.SubcategoryId == a.Id).Count()
-                }).ToList();
                 return list;
             }
         }

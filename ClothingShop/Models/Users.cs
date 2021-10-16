@@ -15,6 +15,10 @@ namespace ClothingShop.Models
         public string Name { get; set; }
         public string Surname { get; set; }
         public DateTime Birthday { get; set; }
+
+
+        [ForeignKey("ClubCards")]
+        public Guid? ClubCardId { get; set; }
         public virtual ClubCards ClubCards { get; set; }
     }
 }

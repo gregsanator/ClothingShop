@@ -13,12 +13,13 @@ namespace ClothingShop.Services
         {
             using (var context = new ClothingShopDbContext())
             {
-                IQueryable<ClothingItemsSizes> items = context.ClothingItemsSizes;
+                IQueryable<ClothingItemsSizes> items = context.ClothingItemsSizes.Where(a => a.Quantity > 0);
+
                 if (filter.Brands.Any() || filter.Subcategories.Any() || filter.Sizes.Any())
-                {
-                    items.Where(a => (!filter.Subcategories.Any() || filter.Subcategories.Contains(a.ClothingItem.SubcategoryId)) &&
-                                        (!filter.Sizes.Any() || filter.Sizes.Contains(a.SizeId)) &&
-                                    (!filter.Brands.Any() || filter.Brands.Contains(a.ClothingItem.BrandId)));
+                { 
+                    items.Where(a => (filter.Subcategories.Count == 0 || filter.Subcategories.Contains(a.ClothingItem.SubcategoryId)) &&
+                                        (filter.Sizes.Count == 0 || filter.Sizes.Contains(a.SizeId)) &&
+                                    (filter.Brands.Count == 0 || filter.Brands.Contains(a.ClothingItem.BrandId)));
                 }
                 return List(items);
             }
@@ -38,8 +39,9 @@ namespace ClothingShop.Services
         public List<ClothingItemsListItem> FilterPrice(PriceFilters filter, List<ClothingItemsListItem> list)
         // Price filter (on searched items/checkbox filters/normal list)
         {
-            list.Where(a => ((!filter.HighestPrice.HasValue || a.Price < filter.HighestPrice)) &&
-            (!filter.LowestPrice.HasValue || a.Price > filter.LowestPrice));
+            list = list.Where(a => ((!filter.HighestPrice.HasValue || a.Price < filter.HighestPrice)) &&
+            (!filter.LowestPrice.HasValue || a.Price > filter.LowestPrice)).ToList();
+
             return list;
         }
 
@@ -47,7 +49,7 @@ namespace ClothingShop.Services
         public List<ClothingItemsListItem> Search(string filter, List<ClothingItemsListItem> list) // search items(normal list and checkbox listed)
         {
             if (!string.IsNullOrEmpty(filter))
-                list.Where(a => a.Name.Contains(filter) || a.BrandName.Contains(filter));
+                list = list.Where(a => a.Name.Contains(filter) || a.BrandName.Contains(filter)).ToList();
 
             return list;
         }
@@ -65,30 +67,17 @@ namespace ClothingShop.Services
             return list;
         }
 
-        /*        public List<ClothingItemsListItem> Search(string filter) // search pr 
-        {
-            using (var context = new ClothingShopDbContext())
-            {
-                IQueryable<ClothingItemsSizes> items = context.ClothingItemsSizes;
-                if (!string.IsNullOrEmpty(filter))
-                    items = items.Where(a => a.ClothingItem.Name.Contains(filter) || a.ClothingItem.Brand.Name.Contains(filter));
-
-                return List(items);
-            }
-        }*/
-
         public List<ClothingItemsListItem> List(IQueryable<ClothingItemsSizes> items) // List items
         {
             using (var context = new ClothingShopDbContext())
             {
-                items.Select(a => a.ClothingItemId).Distinct(); // eliminating all duplicate records
+                items = items.GroupBy(a => a.ClothingItemId).Select(a => a.First()); // eliminating all duplicate records
 
                 List<ClothingItemsListItem> list = items.Select(a => new ClothingItemsListItem
                 {
                     Id = a.ClothingItem.Id,
                     Name = a.ClothingItem.Name,
                     Price = a.ClothingItem.Price,
-                    Availability = true,
                     BrandName = a.ClothingItem.Brand.Name,
                     DateAdded = a.ClothingItem.DateAdded
                 }).ToList();
@@ -102,14 +91,13 @@ namespace ClothingShop.Services
         {
             using (var context = new ClothingShopDbContext())
             {
-                ClothingItemsForm item = context.ClothingItems.Where(a => a.Id == itemId).Select(a => new ClothingItemsForm
+                ClothingItemsForm item = context.ClothingItemsSizes.Where(a => a.Id == itemId).Select(a => new ClothingItemsForm
                 {
-                    Name = a.Name,
-                    BrandName = a.Brand.Name,
-                    Availability = context.ClothingItemsSizes.Any(b => b.ClothingItemId == itemId && b.Quantity > 0),
-                    Description = a.Description,
-                    Gender = a.Gender,
-                    Price = a.Price
+                    Name = a.ClothingItem.Name,
+                    BrandName = a.ClothingItem.Brand.Name,
+                    Description = a.ClothingItem.Description,
+                    Gender = a.ClothingItem.Gender,
+                    Price = a.ClothingItem.Price
                 }).FirstOrDefault();
 
                 return item;

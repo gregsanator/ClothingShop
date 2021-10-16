@@ -10,22 +10,30 @@ namespace ClothingShop.Services
     public class ClothingItemsSizesService
     {
         //This service is for the head administrators to see the total stock number of a ClothingItemSIze
-        public List<StockInformation> ListStockInfo(Guid id)
+        public List<ShopItem> ListStockInfo(Guid id)
         {
             using (var context = new ClothingShopDbContext())
             {
-                //group all items where clothingItemId is equal to passed id(admin clicks on air max 7 item)
-               List<StockInformation> list = (from l in context.ClothingItemsSizes.Where(a => a.ClothingItemId == id)
-                        group l by new { l.ClothingItemId, l.Shop.Name, l.InStock} into cisGroup
-                        select new StockInformation
-                        {
-                            ItemId = cisGroup.Key.ClothingItemId, //item id // it gives error because of both prop in clothingItem and shop have prop Name
-                            Shop = cisGroup.Key.Name, // shop name
-                            InStock = cisGroup.Key.InStock, // is itemSize in stock
-                            ItemSizes = cisGroup.Select(a => a.Size.Size).ToList(),
-                            Quantity = cisGroup.Sum(a => a.Quantity)
-                            // all the sizes that are/aren't in stock for that item in a shop
-                        }).ToList();
+                IQueryable<ClothingItems> items = context.ClothingItems.Where(a => a.Id == id);
+                
+               //group all items where clothingItemId is equal to passed id(admin clicks on air max 7 item)
+               List<ShopItem> list = (from l in context.ClothingItemsSizes.Where(a => a.ClothingItemId == id)
+                                      group l by new { l.ShopId, l.Shop.Name } into cisGroup
+                                      select new ShopItem
+                                      {
+                                          Id = cisGroup.Key.ShopId,
+                                          Name = cisGroup.Key.Name,
+                                          StockItems = cisGroup.GroupBy(a => a.InStock).Select(a => new StockItem
+                                          {
+                                              InStock = a.Key,
+                                              StockInformation = a.Select(b => new StockInformation
+                                              {
+                                                  Quantity = b.Quantity,
+                                                  Size = b.Size.Size
+                                              }).ToList()
+                                          }).ToList()
+                                      }).ToList();
+
                 return list;
             }
         }
@@ -38,7 +46,7 @@ namespace ClothingShop.Services
                 if (brandName != null)
                     itemsSizes = itemsSizes.Where(a => a.ClothingItem.Brand.Name == brandName);
 
-                itemsSizes.Select(a => a.ClothingItemId).Distinct(); // eliminate all duplicate clothingItems so that we are left only with one sample of the item
+                itemsSizes.GroupBy(a => a.ClothingItemId).Select(x => x.First());// eliminate all duplicate clothingItems so that we are left only with one sample of the item
 
                 List<ClothingItemsSizesListItem> list = itemsSizes.Select(a => new ClothingItemsSizesListItem
                 {

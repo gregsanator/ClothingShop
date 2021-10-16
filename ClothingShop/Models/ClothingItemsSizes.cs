@@ -8,6 +8,7 @@ namespace ClothingShop.Models
 {
     public class ClothingItemsSizes
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
 
 

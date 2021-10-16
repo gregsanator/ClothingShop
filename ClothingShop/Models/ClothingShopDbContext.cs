@@ -8,9 +8,18 @@ namespace ClothingShop.Models
 {
     public class ClothingShopDbContext : DbContext
     {
+
         public ClothingShopDbContext() : base("name=ClothingShop")
         {
 
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ClubCards>()
+                .HasRequired(c => c.User)
+                .WithMany()
+                .WillCascadeOnDelete(false);
         }
 
         public DbSet<Administrators> Administrators { get; set; }

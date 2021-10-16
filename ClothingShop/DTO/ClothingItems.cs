@@ -12,7 +12,6 @@ namespace ClothingShop.DTO
             public Guid Id { get; set; }
             public string BrandName { get; set; }
             public string Name { get; set; }
-            public bool Availability { get; set; }
             public double Price { get; set; }
             public DateTime DateAdded { get; set; }
         }
@@ -20,7 +19,6 @@ namespace ClothingShop.DTO
         public class ClothingItemsForm
         {
             public string Name { get; set; }
-            public bool Availability { get; set; }
             public int Gender { get; set; }
             public string BrandName { get; set; }
             public string Description { get; set; }

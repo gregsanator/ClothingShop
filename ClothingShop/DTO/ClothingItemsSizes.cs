@@ -15,13 +15,21 @@ namespace ClothingShop.DTO
 
         public class StockInformation
         {
-            public Guid ItemId { get; set; }
-            public List<string> ItemSizes { get; set; }
-            public string Shop { get; set; }
-            public bool InStock { get; set; }
+            public string Size { get; set; }
             public double Quantity { get; set; }
+        }
 
+        public class ShopItem
+        {
+            public Guid Id { get; set; }
+            public string Name { get; set; }
+            public List<StockItem> StockItems { get; set; }
+        }
 
+        public class StockItem
+        {
+            public bool InStock { get; set; }
+            public List<StockInformation> StockInformation { get; set; }
         }
 
         public class ClothingItemSizesSave

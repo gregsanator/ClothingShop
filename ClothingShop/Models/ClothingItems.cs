@@ -28,6 +28,7 @@ namespace ClothingShop.Models
         public double Price { get; set; }
         public int SizeType { get; set; }
         public DateTime DateAdded { get; set; }
+        public ICollection<ClothingItemsSizes> ClothingItemsSizes { get; set; }
 
     }
 }
