@@ -132,8 +132,9 @@
     <Compile Include="Controllers\CartsController.cs" />
     <Compile Include="Controllers\CategoriesController.cs" />
     <Compile Include="Controllers\ClothingItemsController.cs" />
+    <Compile Include="Controllers\ClubCardsController.cs" />
     <Compile Include="Controllers\CothingItemsSizesController.cs" />
-    <Compile Include="Controllers\PromotionstController.cs" />
+    <Compile Include="Controllers\PromotionsController.cs" />
     <Compile Include="Controllers\PurchasesController.cs" />
     <Compile Include="Controllers\ShopsController.cs" />
     <Compile Include="Controllers\SizesController.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="DTO\Categories.cs" />
     <Compile Include="DTO\ClothingItems.cs" />
     <Compile Include="DTO\ClothingItemsSizes.cs" />
+    <Compile Include="DTO\ClubCards.cs" />
     <Compile Include="DTO\Promotions.cs" />
     <Compile Include="DTO\Purchases.cs" />
     <Compile Include="DTO\Shops.cs" />
@@ -158,21 +160,9 @@
     <Compile Include="Migrations\202110011214485_InitialMigration.designer.cs">
       <DependentUpon>202110011214485_InitialMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202110151453184_addingChangesToModelsAndAddingNewModels.cs" />
-    <Compile Include="Migrations\202110151453184_addingChangesToModelsAndAddingNewModels.designer.cs">
-      <DependentUpon>202110151453184_addingChangesToModelsAndAddingNewModels.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202110151528532_makeForeignKeyForClubcardsNullable.cs" />
-    <Compile Include="Migrations\202110151528532_makeForeignKeyForClubcardsNullable.designer.cs">
-      <DependentUpon>202110151528532_makeForeignKeyForClubcardsNullable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202110151540270_autoGenerationForIdInClubCardsModel.cs" />
-    <Compile Include="Migrations\202110151540270_autoGenerationForIdInClubCardsModel.designer.cs">
-      <DependentUpon>202110151540270_autoGenerationForIdInClubCardsModel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202110161312495_ImplementingAutoGenerateIdForAllObj.cs" />
-    <Compile Include="Migrations\202110161312495_ImplementingAutoGenerateIdForAllObj.designer.cs">
-      <DependentUpon>202110161312495_ImplementingAutoGenerateIdForAllObj.cs</DependentUpon>
+    <Compile Include="Migrations\202110161341453_ChangesToModelsAndAddingNewModelsToDb.cs" />
+    <Compile Include="Migrations\202110161341453_ChangesToModelsAndAddingNewModelsToDb.designer.cs">
+      <DependentUpon>202110161341453_ChangesToModelsAndAddingNewModelsToDb.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Administrators.cs" />
@@ -202,6 +192,7 @@
     <Compile Include="Services\CategoriesService.cs" />
     <Compile Include="Services\ClothingItemsService.cs" />
     <Compile Include="Services\ClothingItemsSizesService.cs" />
+    <Compile Include="Services\ClubCardsService.cs" />
     <Compile Include="Services\PromotionsService.cs" />
     <Compile Include="Services\PurchasesService.cs" />
     <Compile Include="Services\ShopsService.cs" />
@@ -230,6 +221,7 @@
     <Folder Include="Views\Carts\" />
     <Folder Include="Views\Categories\" />
     <Folder Include="Views\ClothingItems\" />
+    <Folder Include="Views\ClubCards\" />
     <Folder Include="Views\CothingItemsSizes\" />
     <Folder Include="Views\Promotionst\" />
     <Folder Include="Views\Purchases\" />
@@ -242,17 +234,8 @@
     <EmbeddedResource Include="Migrations\202110011214485_InitialMigration.resx">
       <DependentUpon>202110011214485_InitialMigration.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202110151453184_addingChangesToModelsAndAddingNewModels.resx">
-      <DependentUpon>202110151453184_addingChangesToModelsAndAddingNewModels.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202110151528532_makeForeignKeyForClubcardsNullable.resx">
-      <DependentUpon>202110151528532_makeForeignKeyForClubcardsNullable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202110151540270_autoGenerationForIdInClubCardsModel.resx">
-      <DependentUpon>202110151540270_autoGenerationForIdInClubCardsModel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202110161312495_ImplementingAutoGenerateIdForAllObj.resx">
-      <DependentUpon>202110161312495_ImplementingAutoGenerateIdForAllObj.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202110161341453_ChangesToModelsAndAddingNewModelsToDb.resx">
+      <DependentUpon>202110161341453_ChangesToModelsAndAddingNewModelsToDb.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

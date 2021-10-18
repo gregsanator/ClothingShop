@@ -71,36 +71,46 @@ namespace ClothingShop.Services
             }
         }
 
-        public bool PurchaseItems(Guid id) // ?? dali e podobro da dobie id na user ili ke dobie lista od id-nja na cartovi ?
+        public bool PurchaseItems(PurchaseCarts model) // ?? dali e podobro da dobie id na user ili ke dobie lista od id-nja na cartovi ?
         {
             using (var context = new ClothingShopDbContext())
             {
-                foreach (var item in context.Carts.Where(a => a.UserId == id))
+                IQueryable<Carts> userCarts = context.Carts.Where(a => a.UserId == model.UserId);
+                bool discount = context.ClubCards.Where(a => a.UserId == model.UserId).Any();
+
+                List<Purchases> purchases = userCarts.Select(a => new Purchases
                 {
-                    Purchases purchase = new Purchases
-                    {
-                        UserId = item.UserId,
-                        ClothingItemSizeId = item.ClothingItemSizeId,
-                        Quantity = item.Quantity,
-                        TotalPrice = item.ClothingItemSize.ClothingItem.Price * item.Quantity * (1 - (item.User.ClubCards.DiscountPercantage / 100)),
-                        DateOrdered = DateTime.Now,
-                        DiscountPercantage = item.User.ClubCards.DiscountPercantage,
-                        PromotionId = context.ClothingItemsPromotions.Where
-                            (a => a.ClothingItemId == item.ClothingItemSize.ClothingItem.Id).FirstOrDefault().ClothingItem.Id
-                    };
+                    UserId = a.UserId,
+                    ClothingItemSizeId = a.ClothingItemSizeId,
+                    Quantity = a.Quantity,
+                    TotalPrice = a.ClothingItemSize.ClothingItem.Price * a.Quantity * (1 - (a.User.ClubCards.DiscountPercantage / 100)),
+                    DateOrdered = DateTime.Now,
+                    DiscountPercantage = a.User.ClubCards.DiscountPercantage
+                }).ToList();
+                foreach (var item in purchases)
+                {
+                        Purchases purchase = new Purchases
+                        {
+                            UserId = item.UserId,
+                            ClothingItemSizeId = item.ClothingItemSizeId,
+                            Quantity = item.Quantity,
+                            TotalPrice = item.TotalPrice,
+                            DateOrdered = DateTime.Now,
+                            DiscountPercantage = item.DiscountPercantage
+                        };
 
-                    if (context.Users.Where(a => a.Id == id).Any())
-                    {
-                        ClubCards clubCard = context.ClubCards.Where(a => a.UserId == id).FirstOrDefault();
-                        clubCard.Points += purchase.TotalPrice / 10; // adjusting the points of the user's clubcard(adding total price / 100 to the total points)
-                    }
+                        if (context.ClubCards.Where(a => a.UserId == model.UserId).Any())
+                        {
+                            ClubCards clubCard = context.ClubCards.Where(a => a.UserId == model.UserId).FirstOrDefault();
+                            clubCard.Points += purchase.TotalPrice / 10; // adjusting the points of the user's clubcard(adding total price / 100 to the total points)
+                        }
 
-                    Models.ClothingItemsSizes itemSize = context.ClothingItemsSizes.Where(a => a.Id == item.ClothingItemSizeId).FirstOrDefault();
-                    itemSize.Quantity -= item.Quantity; // adjusting quantity of product with certain size
+                        Models.ClothingItemsSizes itemSize = context.ClothingItemsSizes.Where(a => a.Id == item.ClothingItemSizeId).FirstOrDefault();
+                        itemSize.Quantity -= item.Quantity; // adjusting quantity of product with certain size
 
-                    context.Carts.Remove(item);
-                    context.Purchases.Add(purchase);
+                        context.Purchases.Add(purchase);
                 }
+                context.Carts.RemoveRange(userCarts);
                 context.SaveChanges();
                 return true;
             }

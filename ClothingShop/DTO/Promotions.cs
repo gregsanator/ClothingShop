@@ -10,7 +10,7 @@ namespace ClothingShop.DTO
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public double DiscoundPercantage { get; set; }
+        public double DiscountPercantage { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
     }
@@ -18,7 +18,7 @@ namespace ClothingShop.DTO
     public class PromotionsForm
     {
         public string Name { get; set; }
-        public double DiscoundPercantage { get; set; }
+        public double DiscountPercantage { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public List<string> ClothingItemsName { get; set; }
@@ -28,7 +28,7 @@ namespace ClothingShop.DTO
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public double DiscoundPercantage { get; set; }
+        public double DiscountPercantage { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
     }

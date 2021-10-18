@@ -18,7 +18,7 @@ namespace ClothingShop.Services
                 {
                     Id = a.Id,
                     Name = a.Name,
-                    DiscoundPercantage = a.DiscountPercantage,
+                    DiscountPercantage = a.DiscountPercantage,
                     StartDate = a.StartDate,
                     EndDate = a.EndDate
                 }).ToList();
@@ -33,7 +33,7 @@ namespace ClothingShop.Services
                 PromotionsForm details = context.Promotions.Where(a => a.Id == id).Select(a => new PromotionsForm
                 {
                     Name = a.Name,
-                    DiscoundPercantage = a.DiscountPercantage,
+                    DiscountPercantage = a.DiscountPercantage,
                     StartDate = a.StartDate,
                     EndDate = a.EndDate,
                     ClothingItemsName = a.ClothingItemsPromotions.Select(b => b.ClothingItem.Name).ToList()
@@ -41,6 +41,7 @@ namespace ClothingShop.Services
                 return details;
             }
         }
+
         public bool Save(PromotionsSave model) // make a new promotion
         {
             using (var context = new ClothingShopDbContext())
@@ -49,7 +50,7 @@ namespace ClothingShop.Services
                 {
                     Id = model.Id,
                     Name = model.Name,
-                    DiscountPercantage = model.DiscoundPercantage,
+                    DiscountPercantage = model.DiscountPercantage,
                     StartDate = model.StartDate,
                     EndDate = model.EndDate
                 };
@@ -87,48 +88,56 @@ namespace ClothingShop.Services
             }
         }
 
-        public bool AddSelected(SelectedItemsEnable model) // add all the products of a given subcategory to a promotion(example. all hoodies have 30% discount)
+
+        public bool Delete(Guid id)
         {
             using (var context = new ClothingShopDbContext())
             {
-                IQueryable <ClothingItems> cItems = context.ClothingItems;
+                Promotions promotion = context.Promotions.Find(id);
+                double promotionDiscount = promotion.DiscountPercantage;
+                IQueryable<ClothingItemsPromotions> cip = context.ClothingItemsPromotions.Where(a => a.PromotionId == id);
+                IQueryable<ClothingItems> ci = context.ClothingItems.Where(a => cip.Select(b => b.ClothingItemId).Contains(a.Id));
 
-                if (model.SubcategoryId != null)
-                    cItems = cItems.Where(a => a.SubcategoryId == model.SubcategoryId); 
-                // see if he has selected subcategory chebox to add all items in subcateg
-
-                else if (model.ClothingItemsId.Any())
-                    cItems = cItems.Where(a => model.ClothingItemsId.Contains(a.Id));
-
-                else
-                    return false;
-
-                double discountPercantage = context.Promotions.Find(model.PromotionId).DiscountPercantage;
-
-                    foreach (var item in cItems)
-                    {
-                        ClothingItemsPromotions cip = new ClothingItemsPromotions
-                        {
-                            ClothingItemId = item.Id,
-                            PromotionId = model.PromotionId
-                        };
-
-                        ClothingItemsPromotions any = context.ClothingItemsPromotions.Where(a => a.ClothingItemId == item.Id).FirstOrDefault();
-                        // check if there is existing promotion on item
-
-                        if (any == null)
-                            item.Price *= (1 - (discountPercantage / 100)); // calculate new price of item
-                        else
-                        {
-                            item.Price /= (1 - (any.Promotion.DiscountPercantage / 100)); // bring back the original price
-                            item.Price *= (1 - (discountPercantage / 100)); // calculate the new price
-                            context.ClothingItemsPromotions.Remove(any); // remove old promotion
-                        }
-                        context.ClothingItemsPromotions.Add(cip); // add the item to the promotion
-                    }
-                    context.SaveChanges();
+                foreach (var item in ci)
+                {
+                    item.Price /= (1 - (promotionDiscount / 100));
+                }
+                context.Promotions.Remove(promotion);
+                context.ClothingItemsPromotions.RemoveRange(cip);
+                context.SaveChanges();
                 return true;
             }
         }
+
+        public bool AddDiscountToItems(SelectedItemsEnable model) // add promotion to selected items or a subcategory
+        {
+            using (var context = new ClothingShopDbContext())
+            {
+                double discountPercantage = context.Promotions.Find(model.PromotionId).DiscountPercantage;
+
+                IQueryable<ClothingItems> cItems = context.ClothingItems;
+
+                if (model.SubcategoryId != null)
+                    cItems = cItems.Where(a => a.SubcategoryId == model.SubcategoryId);
+
+
+                else if (model.ClothingItemsId.Count > 0)
+                    cItems.Where(a => model.ClothingItemsId.Contains(a.Id));
+
+                foreach (var item in cItems)
+                {
+                    ClothingItemsPromotions cip = new ClothingItemsPromotions
+                    {
+                        ClothingItemId = item.Id,
+                        PromotionId = model.PromotionId
+                    };
+                    item.Price *= (1 - (discountPercantage / 100));
+                    context.ClothingItemsPromotions.Add(cip); // add the item to the promotion
+                }
+                context.SaveChanges();
+                return true;
+            }
+        }
+
     }
 }

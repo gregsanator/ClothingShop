@@ -8,7 +8,7 @@ using System.Web.Http;
 
 namespace ClothingShop.Controllers
 {
-    public class PromotionstController : ApiController
+    public class PromotionsController : ApiController
     {
         [Route("api/clothingshop/promotions/list")]
         [HttpGet]
@@ -37,7 +37,7 @@ namespace ClothingShop.Controllers
             return Ok(success);
         }
 
-        [Route("api/clothingshop/Promotions/itemsinpromotion/{id}")]
+        [Route("api/clothingshop/promotions/itemsinpromotion/{id}")]
         [HttpGet]
         public IHttpActionResult Permissions(Guid id)
         {
@@ -46,12 +46,21 @@ namespace ClothingShop.Controllers
             return Ok(clothingItems);
         }
 
-        [Route("api/clothingshop/Promotions/addselected")]
+        [Route("api/clothingshop/promotions/adddiscounttoitems")]
         [HttpPost]
-        public IHttpActionResult AddSelected(SelectedItemsEnable model)
+        public IHttpActionResult AddDiscountToItems(SelectedItemsEnable model)
         {
             PromotionsService service = new PromotionsService();
-            bool success = service.AddSelected(model);
+            bool success = service.AddDiscountToItems(model);
+            return Ok(success);
+        }
+
+        [Route("api/clothingshop/promotions/delete/{id}")]
+        [HttpDelete]
+        public IHttpActionResult Delete(Guid id)
+        {
+            PromotionsService service = new PromotionsService();
+            bool success = service.Delete(id);
             return Ok(success);
         }
     }

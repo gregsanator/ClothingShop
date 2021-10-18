@@ -40,10 +40,10 @@ namespace ClothingShop.Controllers
 
         [Route("api/clothingshop/carts/purchaseitems")]
         [HttpPost]
-        public IHttpActionResult PurchaseItems(Guid id)
+        public IHttpActionResult PurchaseItems(PurchaseCarts model)
         {
             CartsService service = new CartsService();
-            bool success = service.PurchaseItems(id);
+            bool success = service.PurchaseItems(model);
             return Ok(success);
         }
     }

@@ -12,6 +12,7 @@ namespace ClothingShop.Controllers
     {
         [HttpGet]
         [Route("api/clothingshop/clothingitemssizes/list/{brandName}")]
+        [Route("api/clothingshop/clothingitemssizes/list")]
         public IHttpActionResult List(string brandName)
         {
             ClothingItemsSizesService service = new ClothingItemsSizesService();
@@ -19,13 +20,14 @@ namespace ClothingShop.Controllers
             return Ok(list);
         }
 
+
         [HttpPost]
-        [Route("api/clothingshop/clothingitemssizes/list/{brandName}")]
+        [Route("api/clothingshop/clothingitemssizes/save")]
         public IHttpActionResult Save(ClothingItemSizesSave model)
         {
             ClothingItemsSizesService service = new ClothingItemsSizesService();
             bool success = service.Save(model);
-            return Ok(model);
+            return Ok(success);
         }
     }
 }

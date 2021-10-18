@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class addingChangesToModelsAndAddingNewModels : DbMigration
+    public partial class ChangesToModelsAndAddingNewModelsToDb : DbMigration
     {
         public override void Up()
         {
@@ -16,7 +16,6 @@
             DropIndex("dbo.SizeTypes", new[] { "ClothingItemId" });
             RenameColumn(table: "dbo.ClothingItems", name: "CategoryId", newName: "SubcategoryId");
             RenameIndex(table: "dbo.ClothingItems", name: "IX_CategoryId", newName: "IX_SubcategoryId");
-            DropPrimaryKey("dbo.ClubCards");
             CreateTable(
                 "dbo.AdministratorsPermissions",
                 c => new
@@ -35,7 +34,7 @@
                 "dbo.Brands",
                 c => new
                     {
-                        Id = c.Guid(nullable: false),
+                        Id = c.Guid(nullable: false, identity: true),
                         Name = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
@@ -59,7 +58,7 @@
                 "dbo.ClothingItemsSizes",
                 c => new
                     {
-                        Id = c.Guid(nullable: false),
+                        Id = c.Guid(nullable: false, identity: true),
                         ClothingItemId = c.Guid(nullable: false),
                         SizeId = c.Guid(nullable: false),
                         ShopId = c.Guid(nullable: false),
@@ -78,7 +77,7 @@
                 "dbo.ClothingItemsPromotions",
                 c => new
                     {
-                        Id = c.Guid(nullable: false),
+                        Id = c.Guid(nullable: false, identity: true),
                         ClothingItemId = c.Guid(nullable: false),
                         PromotionId = c.Guid(nullable: false),
                     })
@@ -92,7 +91,7 @@
                 "dbo.Purchases",
                 c => new
                     {
-                        Id = c.Guid(nullable: false),
+                        Id = c.Guid(nullable: false, identity: true),
                         UserId = c.Guid(nullable: false),
                         ClothingItemSizeId = c.Guid(nullable: false),
                         PromotionId = c.Guid(),
@@ -157,20 +156,18 @@
             AddColumn("dbo.ClothingItems", "Price", c => c.Double(nullable: false));
             AddColumn("dbo.ClothingItems", "SizeType", c => c.Int(nullable: false));
             AddColumn("dbo.ClothingItems", "DateAdded", c => c.DateTime(nullable: false));
-            AddColumn("dbo.Users", "ClubCardId", c => c.Guid(nullable: false));
+            AddColumn("dbo.Users", "ClubCardId", c => c.Guid());
             AddColumn("dbo.Permissions", "Name", c => c.String());
             AddColumn("dbo.Promotions", "Name", c => c.String());
             AddColumn("dbo.Promotions", "StartDate", c => c.DateTime(nullable: false));
             AddColumn("dbo.Promotions", "EndDate", c => c.DateTime(nullable: false));
             AddColumn("dbo.Sizes", "SizeType", c => c.Int(nullable: false));
-            AlterColumn("dbo.ClubCards", "Id", c => c.Guid(nullable: false));
             AlterColumn("dbo.ClubCards", "DiscountPercantage", c => c.Double(nullable: false));
             AlterColumn("dbo.Sizes", "Size", c => c.String());
-            AddPrimaryKey("dbo.ClubCards", "Id");
             CreateIndex("dbo.ClothingItems", "BrandId");
             CreateIndex("dbo.Users", "ClubCardId");
             AddForeignKey("dbo.ClothingItems", "BrandId", "dbo.Brands", "Id", cascadeDelete: true);
-            AddForeignKey("dbo.Users", "ClubCardId", "dbo.ClubCards", "Id", cascadeDelete: true);
+            AddForeignKey("dbo.Users", "ClubCardId", "dbo.ClubCards", "Id");
             AddForeignKey("dbo.ClubCards", "UserId", "dbo.Users", "Id");
             DropColumn("dbo.ClothingItems", "Availability");
             DropColumn("dbo.ClothingItems", "BrandName");
@@ -243,10 +240,8 @@
             DropIndex("dbo.Carts", new[] { "UserId" });
             DropIndex("dbo.AdministratorsPermissions", new[] { "PermissionId" });
             DropIndex("dbo.AdministratorsPermissions", new[] { "AdministratorId" });
-            DropPrimaryKey("dbo.ClubCards");
             AlterColumn("dbo.Sizes", "Size", c => c.Int(nullable: false));
             AlterColumn("dbo.ClubCards", "DiscountPercantage", c => c.Double());
-            AlterColumn("dbo.ClubCards", "Id", c => c.Guid(nullable: false, identity: true));
             DropColumn("dbo.Sizes", "SizeType");
             DropColumn("dbo.Promotions", "EndDate");
             DropColumn("dbo.Promotions", "StartDate");
@@ -268,7 +263,6 @@
             DropTable("dbo.Carts");
             DropTable("dbo.Brands");
             DropTable("dbo.AdministratorsPermissions");
-            AddPrimaryKey("dbo.ClubCards", "Id");
             RenameIndex(table: "dbo.ClothingItems", name: "IX_SubcategoryId", newName: "IX_CategoryId");
             RenameColumn(table: "dbo.ClothingItems", name: "SubcategoryId", newName: "CategoryId");
             CreateIndex("dbo.SizeTypes", "ClothingItemId");

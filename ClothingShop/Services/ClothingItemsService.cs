@@ -17,7 +17,7 @@ namespace ClothingShop.Services
 
                 if (filter.Brands.Any() || filter.Subcategories.Any() || filter.Sizes.Any())
                 { 
-                    items.Where(a => (filter.Subcategories.Count == 0 || filter.Subcategories.Contains(a.ClothingItem.SubcategoryId)) &&
+                    items = items.Where(a => (filter.Subcategories.Count == 0 || filter.Subcategories.Contains(a.ClothingItem.SubcategoryId)) &&
                                         (filter.Sizes.Count == 0 || filter.Sizes.Contains(a.SizeId)) &&
                                     (filter.Brands.Count == 0 || filter.Brands.Contains(a.ClothingItem.BrandId)));
                 }

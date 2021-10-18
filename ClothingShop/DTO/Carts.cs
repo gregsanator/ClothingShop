@@ -30,10 +30,21 @@ namespace ClothingShop.DTO
         public double Quantity { get; set; }
     }
 
-    public class CartsPrice
+    public class PurchaseCarts
     {
+        public Guid UserId { get; set; }
+    }
 
-        public double Price { get; set; }
+    public class PurchaseSave
+    {
+        public Guid Id { get; set; }
+        public Guid UserId { get; set; }
+        public Guid ClothingItemSizeId { get; set; }
+        public double Quantity { get; set; }
+        public double TotalPrice { get; set; }
+        public DateTime DateOrdered { get; set; }
+        public Guid? PromotionId { get; set; }
+        public double? DiscountPercantage { get; set; }
     }
 
     public class CartsOrder

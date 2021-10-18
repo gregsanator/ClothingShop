@@ -43,7 +43,7 @@ namespace ClothingShop.Services
             using (var context = new ClothingShopDbContext())
             {
                 IQueryable<ClothingItemsSizes> itemsSizes = context.ClothingItemsSizes;
-                if (brandName != null)
+                if (!string.IsNullOrEmpty(brandName))
                     itemsSizes = itemsSizes.Where(a => a.ClothingItem.Brand.Name == brandName);
 
                 itemsSizes.GroupBy(a => a.ClothingItemId).Select(x => x.First());// eliminate all duplicate clothingItems so that we are left only with one sample of the item
@@ -70,7 +70,8 @@ namespace ClothingShop.Services
                     ClothingItemId = model.ClothingItemId,
                     SizeId = model.SizeId,
                     Quantity = model.Quantity,
-                    ShopId = model.ShopId
+                    ShopId = model.ShopId,
+                    InStock = model.Quantity > 0
                 };
 
                 if (ciss.Id != Guid.Empty)
@@ -83,7 +84,7 @@ namespace ClothingShop.Services
                 }
 
                 else
-                    context.ClothingItemsSizes.Attach(ciss);
+                    context.ClothingItemsSizes.Add(ciss);
                 context.SaveChanges();
                 return true;
             }

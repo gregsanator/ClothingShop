@@ -7,13 +7,13 @@ namespace ClothingShop.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.4")]
-    public sealed partial class ImplementingAutoGenerateIdForAllObj : IMigrationMetadata
+    public sealed partial class ChangesToModelsAndAddingNewModelsToDb : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(ImplementingAutoGenerateIdForAllObj));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(ChangesToModelsAndAddingNewModelsToDb));
         
         string IMigrationMetadata.Id
         {
-            get { return "202110161312495_ImplementingAutoGenerateIdForAllObj"; }
+            get { return "202110161341453_ChangesToModelsAndAddingNewModelsToDb"; }
         }
         
         string IMigrationMetadata.Source

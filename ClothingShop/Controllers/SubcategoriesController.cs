@@ -10,7 +10,7 @@ namespace ClothingShop.Controllers
 {
     public class SubcategoriesController : ApiController
     {
-        [Route("api/clothingshop/Subcategories/list")]
+        [Route("api/clothingshop/subcategories/list/{id}")]
         [HttpGet]
         public IHttpActionResult List(Guid id)
         {
@@ -20,7 +20,7 @@ namespace ClothingShop.Controllers
         }
 
 
-        [Route("api/clothingshop/Subcategories/save")]
+        [Route("api/clothingshop/subcategories/save")]
         [HttpPost]
         public IHttpActionResult Save(SubcategoriesSave save)
         {
