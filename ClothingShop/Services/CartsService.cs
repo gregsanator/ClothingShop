@@ -13,21 +13,56 @@ namespace ClothingShop.Services
         {
             using (var context = new ClothingShopDbContext())
             {
+                IQueryable<Carts> userCarts = context.Carts.Where(a => a.UserId == id);
+                ClubCards clubCard = context.ClubCards.Where(a => a.UserId == id).FirstOrDefault();
+
+                double discountPercent = clubCard != null ? clubCard.DiscountPercantage : 0;
+
                 CartsListItem item = new CartsListItem();
-                item.CartList = context.Carts.Where(a => a.UserId == id).Select(a => new CartsList
+                item.CartList = userCarts.Select(a => new CartsList
                 {
                     Id = a.Id,
-                    Name = a.User.Name,
                     BrandName = a.ClothingItemSize.ClothingItem.Name,
                     Size = a.ClothingItemSize.Size.Size,
                     Quantity = a.Quantity,
-                    Price = a.ClothingItemSize.ClothingItem.Price * a.Quantity,
-                    PriceAfterDiscount = a.ClothingItemSize.ClothingItem.Price * a.Quantity * (1 - (a.User.ClubCards.DiscountPercantage / 100))
+                    Price = item.TotalPrice == 0 ? a.ClothingItemSize.ClothingItem.Price * a.Quantity :
+                    a.ClothingItemSize.ClothingItem.Price * a.Quantity * (1 - (item.TotalPrice / 100))
                 }).ToList();
 
-                item.TotalPrice = item.CartList.Sum(a => a.PriceAfterDiscount);
+                item.TotalPrice = item.CartList.Sum(a => a.Price);
+
 
                 return item;
+            }
+        }
+
+        public void AddPoints(ClubCards clubCard, double points) // list all the items that are inside the cart for a given user 
+        {
+            using (var context = new ClothingShopDbContext())
+            {
+                clubCard.Points += points;
+                context.SaveChanges();
+            }
+        }
+
+        public void SavePurchases(List<PurchaseSave> list) // list all the items that are inside the cart for a given user 
+        {
+            using (var context = new ClothingShopDbContext())
+            {
+                foreach (var item in list)
+                {
+                    Purchases purchase = new Purchases
+                    {
+                        ClothingItemSizeId = item.ClothingItemSizeId,
+                        UserId = item.UserId,
+                        DiscountPercantage = item.DiscountPercantage,
+                        DateOrdered = item.DateOrdered,
+                        Quantity = item.Quantity,
+                        TotalPrice = item.TotalPrice
+                    };
+                    context.Purchases.Add(purchase);
+                }
+                context.SaveChanges();
             }
         }
 
@@ -71,47 +106,39 @@ namespace ClothingShop.Services
             }
         }
 
-        public bool PurchaseItems(PurchaseCarts model) // ?? dali e podobro da dobie id na user ili ke dobie lista od id-nja na cartovi ?
+        public bool PurchaseItems(PurchaseCarts model)
         {
             using (var context = new ClothingShopDbContext())
             {
-                IQueryable<Carts> userCarts = context.Carts.Where(a => a.UserId == model.UserId);
-                bool discount = context.ClubCards.Where(a => a.UserId == model.UserId).Any();
 
-                List<Purchases> purchases = userCarts.Select(a => new Purchases
+                ClubCards clubCard = context.ClubCards.Where(a => a.UserId == model.Id).FirstOrDefault();
+                IQueryable<Carts> userCarts = context.Carts.Where(a => a.UserId == model.Id);
+
+                double discountPercent = clubCard != null ? clubCard.DiscountPercantage : 0; // if user has clubcard than discount% = clubcardDiscount% else it is 0
+
+                List<PurchaseSave> purchases = userCarts.Select(a => new PurchaseSave // map into PurchaseSave DTO
                 {
                     UserId = a.UserId,
                     ClothingItemSizeId = a.ClothingItemSizeId,
                     Quantity = a.Quantity,
-                    TotalPrice = a.ClothingItemSize.ClothingItem.Price * a.Quantity * (1 - (a.User.ClubCards.DiscountPercantage / 100)),
+                    TotalPrice = discountPercent == 0 ? a.Quantity * a.ClothingItemSize.ClothingItem.Price : 
+                        a.Quantity * a.ClothingItemSize.ClothingItem.Price * (1 - (discountPercent / 100)), // if discount 0 than original price if not 0 calculate discounted price
                     DateOrdered = DateTime.Now,
-                    DiscountPercantage = a.User.ClubCards.DiscountPercantage
+                    DiscountPercantage = discountPercent
                 }).ToList();
-                foreach (var item in purchases)
+
+                context.Carts.RemoveRange(userCarts); // remove all the carts from the carts table
+
+                if(clubCard != null) // if the user has a clubcards than add points
                 {
-                        Purchases purchase = new Purchases
-                        {
-                            UserId = item.UserId,
-                            ClothingItemSizeId = item.ClothingItemSizeId,
-                            Quantity = item.Quantity,
-                            TotalPrice = item.TotalPrice,
-                            DateOrdered = DateTime.Now,
-                            DiscountPercantage = item.DiscountPercantage
-                        };
-
-                        if (context.ClubCards.Where(a => a.UserId == model.UserId).Any())
-                        {
-                            ClubCards clubCard = context.ClubCards.Where(a => a.UserId == model.UserId).FirstOrDefault();
-                            clubCard.Points += purchase.TotalPrice / 10; // adjusting the points of the user's clubcard(adding total price / 100 to the total points)
-                        }
-
-                        Models.ClothingItemsSizes itemSize = context.ClothingItemsSizes.Where(a => a.Id == item.ClothingItemSizeId).FirstOrDefault();
-                        itemSize.Quantity -= item.Quantity; // adjusting quantity of product with certain size
-
-                        context.Purchases.Add(purchase);
+                    double bonusPoints = purchases.Sum(a => a.TotalPrice) / 10;
+                    AddPoints(clubCard, bonusPoints);
                 }
-                context.Carts.RemoveRange(userCarts);
+
+                SavePurchases(purchases); //save purchases
+
                 context.SaveChanges();
+                
                 return true;
             }
         }

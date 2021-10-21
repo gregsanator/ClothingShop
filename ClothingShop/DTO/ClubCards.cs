@@ -20,7 +20,7 @@ namespace ClothingShop.DTO
         public string AdministratorName { get; set; }
         public DateTime DateCreated { get; set; }
         public double Points { get; set; }
-        public double DiscountPercantage { get; set; }
+        public int DiscountPercantage { get; set; }
         public bool Enabled { get; set; }
     }
 
@@ -31,7 +31,7 @@ namespace ClothingShop.DTO
         public Guid AdministratorId { get; set; }
         public DateTime DateCreated { get; set; }
         public double Points { get; set; }
-        public double DiscountPercantage { get; set; }
+        public int DiscountPercantage { get; set; }
         public bool Enabled { get; set; }
     }
 }

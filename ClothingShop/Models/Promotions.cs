@@ -10,7 +10,7 @@ namespace ClothingShop.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
-        public double DiscountPercantage { get; set; }
+        public int DiscountPercantage { get; set; }
         public string Name { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }

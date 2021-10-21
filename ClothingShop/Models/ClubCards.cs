@@ -25,7 +25,7 @@ namespace ClothingShop.Models
 
         public DateTime DateCreated { get; set; }
         public double Points { get; set; }
-        public double DiscountPercantage { get; set; }
+        public int DiscountPercantage { get; set; }
         public bool Enabled { get; set; }
 
     }

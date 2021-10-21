@@ -13,6 +13,6 @@ namespace ClothingShop.DTO
         public double Quantity { get; set; }
         public double TotalPrice { get; set; }
         public DateTime DateOrdered { get; set; }
-        public double? DiscountPercantage { get; set; }
+        public double DiscountPercantage { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClothingShop.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,6 +12,14 @@ namespace ClothingShop.DTO
         public double TotalPrice { get; set; }
     }
 
+    public class UserDetails
+    {
+        public List<Carts> CartList { get; set; }
+        public int ClubCardDiscount { get; set; }
+        public double ClubCardPoints { get; set; }
+        public Guid? ClubCardId { get; set; }
+    }
+
     public class CartsList
     {
         public Guid Id { get; set; }
@@ -19,7 +28,6 @@ namespace ClothingShop.DTO
         public string BrandName { get; set; }
         public double Quantity { get; set; }
         public double Price { get; set; }
-        public double PriceAfterDiscount { get; set; }
     }
 
     public class CartsSave
@@ -32,7 +40,14 @@ namespace ClothingShop.DTO
 
     public class PurchaseCarts
     {
-        public Guid UserId { get; set; }
+        public Guid Id { get; set; }
+    }
+
+
+    public class ChangeQuantity
+    {
+        public Guid ClothingItemSizeId { get; set; }
+        public double Quantity { get; set; }
     }
 
     public class PurchaseSave
@@ -44,7 +59,7 @@ namespace ClothingShop.DTO
         public double TotalPrice { get; set; }
         public DateTime DateOrdered { get; set; }
         public Guid? PromotionId { get; set; }
-        public double? DiscountPercantage { get; set; }
+        public double DiscountPercantage { get; set; }
     }
 
     public class CartsOrder

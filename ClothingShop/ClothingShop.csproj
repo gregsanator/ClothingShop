@@ -164,6 +164,14 @@
     <Compile Include="Migrations\202110161341453_ChangesToModelsAndAddingNewModelsToDb.designer.cs">
       <DependentUpon>202110161341453_ChangesToModelsAndAddingNewModelsToDb.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202110181504232_changesToPurchasesTableAndMakingDiscountPercantagePropInAllTablesOfTypeInt.cs" />
+    <Compile Include="Migrations\202110181504232_changesToPurchasesTableAndMakingDiscountPercantagePropInAllTablesOfTypeInt.designer.cs">
+      <DependentUpon>202110181504232_changesToPurchasesTableAndMakingDiscountPercantagePropInAllTablesOfTypeInt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202110191337556_ChangeTypeFromDoubleToIntInModelsThatHaveDiscountPercantageProp.cs" />
+    <Compile Include="Migrations\202110191337556_ChangeTypeFromDoubleToIntInModelsThatHaveDiscountPercantageProp.designer.cs">
+      <DependentUpon>202110191337556_ChangeTypeFromDoubleToIntInModelsThatHaveDiscountPercantageProp.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Administrators.cs" />
     <Compile Include="Models\AdministratorsPermissions.cs" />
@@ -236,6 +244,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202110161341453_ChangesToModelsAndAddingNewModelsToDb.resx">
       <DependentUpon>202110161341453_ChangesToModelsAndAddingNewModelsToDb.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110181504232_changesToPurchasesTableAndMakingDiscountPercantagePropInAllTablesOfTypeInt.resx">
+      <DependentUpon>202110181504232_changesToPurchasesTableAndMakingDiscountPercantagePropInAllTablesOfTypeInt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202110191337556_ChangeTypeFromDoubleToIntInModelsThatHaveDiscountPercantageProp.resx">
+      <DependentUpon>202110191337556_ChangeTypeFromDoubleToIntInModelsThatHaveDiscountPercantageProp.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

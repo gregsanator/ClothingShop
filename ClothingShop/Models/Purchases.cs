@@ -22,14 +22,9 @@ namespace ClothingShop.Models
         public ClothingItemsSizes ClothingItemSize { get; set; }
 
 
-        [ForeignKey("Promotion")]
-        public Guid? PromotionId { get; set; }
-        public Promotions Promotion { get; set; }
-
-
         public double Quantity { get; set; }
         public double TotalPrice { get; set; }
         public DateTime DateOrdered { get; set; }
-        public double? DiscountPercantage { get; set; }
+        public double DiscountPercantage { get; set; }
     }
 }
